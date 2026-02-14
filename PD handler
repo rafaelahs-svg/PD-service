@@ -1,0 +1,38 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local GoodSignal = require(ReplicatedStorage.Utils.GoodSignal)
+
+local PlayerData = {}
+PlayerData.__index = PlayerData
+
+function PlayerData.new(player: Player)
+	local newPlayerData = {}
+	newPlayerData.Xp = 0
+	newPlayerData.Level = 1
+	newPlayerData.Coins = 0
+	newPlayerData.Inventory = {}
+	
+	newPlayerData.Changed = GoodSignal.new()
+
+	newPlayerData.GetInfo = function(self)
+		local playerInfo = table.clone(newPlayerData)
+		playerInfo.Changed = nil
+		return playerInfo
+	end
+	
+	return (setmetatable({}, {
+		__index = function(_, key)
+			return newPlayerData[key] or PlayerData[key]
+		end,
+	    __newindex = function(_, key, value)
+			newPlayerData[key] = value
+			newPlayerData.Changed:Fire(key, value)
+		end,
+	}))
+end
+
+function PlayerData:InsertOnInventory(Item)
+	table.insert(self.Inventory, Item)
+end
+
+return PlayerData
