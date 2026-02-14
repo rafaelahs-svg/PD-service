@@ -1,0 +1,20 @@
+local PlayerDataModule = require(script.PlayerData)
+
+local PlayerDataService = {
+	_cache = {}
+}
+
+function PlayerDataService.GetPlayerData(player)
+	local alreadyPlayerData = PlayerDataService._cache[player]
+
+	if alreadyPlayerData then
+		return alreadyPlayerData
+	end
+
+	local newPlayerData = PlayerDataModule.new(player)
+	PlayerDataService._cache[player] = newPlayerData
+
+	return newPlayerData
+end
+
+return PlayerDataService
