@@ -1,0 +1,9 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local GoodSignal = require(ReplicatedStorage.Utils.GoodSignal)
+
+local PlayerData = {}
+PlayerData.__index = PlayerData
+
+function PlayerData.new(player: Player)
+	local newPlayerData = {}
